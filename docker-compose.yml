@@ -1,30 +1,9 @@
-version: '3.8'
-
 services:
-  # Next.js Application
-  nextjs:
+  # Queue Server for Email and Job Processing
+  queue-server:
+    container_name: feedback-queue-server
     build:
-      context: ./feedback
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - MAIL_SERVER_URL=http://mail-server:3001
-    volumes:
-      - ./feedback:/app
-      - /app/node_modules
-    depends_on:
-      - redis
-      - mail-server
-    restart: unless-stopped
-    command: npm run dev
-
-  # Mail Server with BullMQ Worker
-  mail-server:
-    build:
-      context: ./mail-server
+      context: ./feedback/queue-server
     ports:
       - "3001:3001"
     environment:
@@ -37,14 +16,15 @@ services:
       - EMAIL_PASSWORD=your-app-password
       - EMAIL_FROM=Feedback App <sociogram.verify.team@gmail.com>
     volumes:
-      - ./mail-server:/app
+      - ./feedback/queue-server:/app
       - /app/node_modules
     depends_on:
       - redis
     restart: unless-stopped
 
-  # Redis Server
+  # Redis Server for Queue and Caching
   redis:
+    container_name: feedback-redis
     image: redis:7-alpine
     ports:
       - "6379:6379"
