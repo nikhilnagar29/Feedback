@@ -26,6 +26,7 @@ export interface User extends Document{
     isVerified?: boolean ; // Optional field for verification status
     isAcceptingMessages: boolean ;
     messages: Message[];
+    products: mongoose.Types.ObjectId[]; // Array of product IDs
 }
 
 const UserSchema : Schema<User> = new Schema({
@@ -66,7 +67,11 @@ const UserSchema : Schema<User> = new Schema({
         type: Boolean,
         default: true
     },
-    messages: [MessageSchema]   
+    messages: [MessageSchema],
+    products: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+    }]
 })
 
 const UserModel = (mongoose.models.User as mongoose.Model<User>) || (mongoose.model<User>('User', UserSchema));

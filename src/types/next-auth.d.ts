@@ -1,20 +1,25 @@
 import 'next-auth';
+import NextAuth from "next-auth";
 
 declare module 'next-auth' {
   interface Session {
     user: {
       _id?: string;
+      username?: string;
+      email?: string;
       isVerified?: boolean;
       isAcceptingMessages?: boolean;
-      username?: string;
-    } & DefaultSession['user'];
+    }
   }
 
   interface User {
     _id?: string;
+    username?: string;
+    email?: string;
     isVerified?: boolean;
     isAcceptingMessages?: boolean;
-    username?: string;
+    verifyCode?: string;
+    verifyCodeExpiry?: Date;
   }
 }
 
@@ -24,5 +29,11 @@ declare module 'next-auth/jwt' {
     isVerified?: boolean;
     isAcceptingMessages?: boolean;
     username?: string;
+  }
+}
+
+declare module 'next/server' {
+  interface NextRequest {
+    ip?: string;
   }
 }

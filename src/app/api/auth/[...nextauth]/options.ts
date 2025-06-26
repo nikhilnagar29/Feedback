@@ -5,10 +5,10 @@ import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
 import GoogleProvider from 'next-auth/providers/google';
 
+// Mail server URL for the queue
+const MAIL_SERVER_URL = process.env.MAIL_SERVER_URL || 'http://localhost:3001';
 
-
-
-export const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = { 
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -69,6 +69,34 @@ export const authOptions: NextAuthOptions = {
         session.user.username = token.username;
       }
       return session;
+    },
+  },
+  events: {
+    // Custom event handler for sending verification OTP
+    async createUser({ user }) {
+      // This would be called when a user is created
+      // Queue the OTP email using the mail server
+      if (user.email && user.username && user.verifyCode) {
+        try {
+          // Send the OTP email request to the mail server queue
+          const response = await fetch(`${MAIL_SERVER_URL}/api/send-otp`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: user.email,
+              username: user.username,
+              otp: user.verifyCode
+            }),
+          });
+          
+          const result = await response.json();
+          console.log('OTP email queued:', result);
+        } catch (error) {
+          console.error('Failed to queue OTP email:', error);
+        }
+      }
     },
   },
   session: {

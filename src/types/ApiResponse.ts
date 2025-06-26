@@ -5,4 +5,5 @@ export interface ApiResponse {
     message : string ;
     isAccesptingMessages?: boolean ;
     messages? : Array<Message> 
+
 }

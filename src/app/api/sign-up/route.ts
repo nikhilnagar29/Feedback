@@ -1,12 +1,15 @@
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
 import bcrypt from 'bcryptjs';
-import { sendVerificationEmail } from '@/helpers/sendVerificationEmail';
+// import { sendVerificationEmail } from '@/helpers/sendVerificationEmail';
+
+// Mail server URL for the queue
+const MAIL_SERVER_URL = process.env.MAIL_SERVER_URL || 'http://localhost:3001';
 
 export async function POST(request: Request) {
-  await dbConnect();
-
   try {
+    await dbConnect();
+
     const { username, email, password } = await request.json();
 
     const existingVerifiedUserByUsername = await UserModel.findOne({
@@ -62,20 +65,27 @@ export async function POST(request: Request) {
       await newUser.save();
     }
 
-    // Send verification email
-    const emailResponse = await sendVerificationEmail(
-      email,
-      username,
-      verifyCode
-    );
+    // Send verification email using mail server
+    const response = await fetch(`${MAIL_SERVER_URL}/api/send-otp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        username,
+        otp: verifyCode,
+      }),
+    });
 
-    console.log('Email response:', emailResponse);
-    
-    if (!emailResponse.success) {
+    const emailResponseData = await response.json();
+    console.log('Email response:', emailResponseData);
+
+    if (!emailResponseData.success) {
       return Response.json(
         {
           success: false,
-          message: emailResponse.message,
+          message: emailResponseData.message || 'Failed to send verification email',
         },
         { status: 500 }
       );
@@ -85,6 +95,7 @@ export async function POST(request: Request) {
       {
         success: true,
         message: 'User registered successfully. Please verify your account.',
+        jobId: emailResponseData.jobId,
       },
       { status: 201 }
     );
