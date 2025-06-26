@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  # Next.js Application
+  nextjs:
+    build:
+      context: ./feedback
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MAIL_SERVER_URL=http://mail-server:3001
+    volumes:
+      - ./feedback:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+      - mail-server
+    restart: unless-stopped
+    command: npm run dev
+
+  # Mail Server with BullMQ Worker
+  mail-server:
+    build:
+      context: ./mail-server
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3001
+      - EMAIL_USER=sociogram.verify.team@gmail.com
+      # Replace with your actual app password
+      - EMAIL_PASSWORD=your-app-password
+      - EMAIL_FROM=Feedback App <sociogram.verify.team@gmail.com>
+    volumes:
+      - ./mail-server:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Redis Server
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  redis_data: 
