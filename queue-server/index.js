@@ -12,7 +12,7 @@ require('./message-worker');
 // Import Redis connection configuration
 const redisOptions = require('./redis-config');
 
-console.log( "redisOptions", redisOptions);
+// console.log( "redisOptions", redisOptions);
 
 // Create email queue
 const emailQueue = new Queue('email', { 
@@ -50,6 +50,7 @@ const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
     new BullMQAdapter(emailQueue),
     new BullMQAdapter(messageQueue)
   ],
+  
   serverAdapter: serverAdapter,
 });
 
