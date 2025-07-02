@@ -10,10 +10,7 @@ const MAIL_SERVER_URL = process.env.MAIL_SERVER_URL || 'http://localhost:3001';
 
 export const authOptions: NextAuthOptions = { 
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
+    
     CredentialsProvider({
       id: 'credentials',
       name: 'Credentials',

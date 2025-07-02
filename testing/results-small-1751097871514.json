@@ -1,0 +1,17 @@
+{
+  "config": {
+    "name": "small",
+    "concurrentRequests": 10,
+    "batchSize": 5,
+    "batchDelay": 500
+  },
+  "timestamp": "2025-06-28T08:04:35.547Z",
+  "metrics": {
+    "successRate": 100,
+    "minResponseTime": 99.85,
+    "maxResponseTime": 127.01,
+    "avgResponseTime": 109.71,
+    "requestsPerSecond": 13.31
+  },
+  "rawOutput": "Starting OTP load test with 10 requests...\nSending in batches of 5 with 500ms delay between batches\nSending batch 1 (1 to 5)\nSending batch 2 (6 to 10)\nChecking status for 10 jobs...\n\n========== OTP LOAD TEST RESULTS ==========\nTotal Requests: 10\nSuccessful Requests: 10\nFailed Requests: 0\nSuccess Rate: 100.00%\nTotal Time: 751.24ms\nMin Response Time: 99.85ms\nMax Response Time: 127.01ms\nAvg Response Time: 109.71ms\nRequests per Second: 13.31\n\nJob Status Distribution:\n  active: 1 (10.00%)\n  waiting: 9 (90.00%)\n===========================================\n"
+}

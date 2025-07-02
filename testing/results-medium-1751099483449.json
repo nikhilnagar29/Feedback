@@ -1,0 +1,17 @@
+{
+  "config": {
+    "name": "medium",
+    "concurrentRequests": 50,
+    "batchSize": 10,
+    "batchDelay": 500
+  },
+  "timestamp": "2025-06-28T08:31:29.356Z",
+  "metrics": {
+    "successRate": 100,
+    "minResponseTime": 117.11,
+    "maxResponseTime": 345.07,
+    "avgResponseTime": 174.88,
+    "requestsPerSecond": 16.75
+  },
+  "rawOutput": "Starting OTP load test with 50 requests...\nSending in batches of 10 with 500ms delay between batches\nSending batch 1 (1 to 10)\nSending batch 2 (11 to 20)\nSending batch 3 (21 to 30)\nSending batch 4 (31 to 40)\nSending batch 5 (41 to 50)\nChecking status for 50 jobs...\n\n========== OTP LOAD TEST RESULTS ==========\nTotal Requests: 50\nSuccessful Requests: 50\nFailed Requests: 0\nSuccess Rate: 100.00%\nTotal Time: 2984.24ms\nMin Response Time: 117.11ms\nMax Response Time: 345.07ms\nAvg Response Time: 174.88ms\nRequests per Second: 16.75\n\nJob Status Distribution:\n  waiting: 50 (100.00%)\n===========================================\n"
+}

@@ -9,15 +9,9 @@ const { ExpressAdapter } = require('@bull-board/express');
 require('./mail-worker');
 require('./message-worker');
 
-// Redis connection configuration
-const redisOptions = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-};
+// Import Redis connection configuration
+const redisOptions = require('./redis-config');
 
-if (process.env.REDIS_PASSWORD) {
-  redisOptions.password = process.env.REDIS_PASSWORD;
-}
 
 // Create email queue
 const emailQueue = new Queue('email', { 
@@ -42,6 +36,7 @@ const messageQueue = new Queue('message', {
     },
   },
 });
+
 
 // Initialize Express app
 const app = express();

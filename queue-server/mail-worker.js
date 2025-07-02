@@ -7,15 +7,8 @@ const EMAIL_USER = process.env.EMAIL_USER || 'sociogram.verify.team@gmail.com';
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || 'your-app-password';
 const EMAIL_FROM = process.env.EMAIL_FROM || `"Feedback App" <${EMAIL_USER}>`;
 
-// Redis connection configuration
-const redisOptions = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-};
-
-if (process.env.REDIS_PASSWORD) {
-  redisOptions.password = process.env.REDIS_PASSWORD;
-}
+// Import Redis connection configuration
+const redisOptions = require('./redis-config');
 
 // Create email transporter
 const createTransporter = () => {

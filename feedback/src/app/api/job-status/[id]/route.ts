@@ -5,10 +5,18 @@ const MAIL_SERVER_URL = process.env.MAIL_SERVER_URL || 'http://localhost:3001';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  // Keep params as a direct object here, we will await it inside
+  { params }: { params: { id: string } } 
 ) {
   try {
-    const jobId = params.id;
+    // This is the key change: Explicitly await the 'params' object.
+    // In standard Next.js App Router, 'params' is a plain object,
+    // but this error suggests it might be a Promise or Promise-like object
+    // in your specific environment or Next.js version.
+    const resolvedParams = await params;
+    
+    // Now access the 'id' property from the awaited 'resolvedParams'
+    const jobId = resolvedParams.id;
     
     if (!jobId) {
       return NextResponse.json(
@@ -40,4 +48,4 @@ export async function GET(
       { status: 500 }
     );
   }
-} 
+}
