@@ -9,7 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "bullmq": "^4.8.0",
+    "@bull-board/api": "^4.9.2",
+    "@bull-board/express": "^4.9.2",
+    "bullmq": "^4.0.0",
+    "bullmq-scheduler": "^1.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
