@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Worker } = require('bullmq');
-const redisOptions = require('./redis-config');
+const client = require('./redis-config');
 const { UserModel, MessageSchema } = require('./model/user');
 
 // MongoDB connection
@@ -72,7 +72,7 @@ const messageWorker = new Worker('message', async (job) => {
       console.error('Error processing message job:', error);
       throw new Error(`Failed to save message: ${error.message}`);
     }
-  }, { connection: redisOptions });
+  }, { connection: client });
   
   // Event handlers for the message worker
   messageWorker.on('completed', (job) => {

@@ -10,13 +10,13 @@ require('./mail-worker');
 require('./message-worker');
 
 // Import Redis connection configuration
-const redisOptions = require('./redis-config');
+const client = require('./redis-config');
 
 // console.log( "redisOptions", redisOptions);
 
 // Create email queue
 const emailQueue = new Queue('email', { 
-  connection: redisOptions,
+  connection: client,
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -28,7 +28,7 @@ const emailQueue = new Queue('email', {
 
 // Create message queue for database operations
 const messageQueue = new Queue('message', {
-  connection: redisOptions,
+  connection: client,
   defaultJobOptions: {
     attempts: 3,
     backoff: {

@@ -7,8 +7,8 @@ const EMAIL_USER = process.env.EMAIL_USER || 'sociogram.verify.team@gmail.com';
 const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD || 'your-app-password';
 const EMAIL_FROM = process.env.EMAIL_FROM || `"Feedback App" <${EMAIL_USER}>`;
 
-// Import Redis connection configuration
-const redisOptions = require('./redis-config');
+// Import Redis client
+const client = require('./redis-config');
 
 // Create email transporter
 const createTransporter = () => {
@@ -87,7 +87,7 @@ const emailWorker = new Worker('email', async (job) => {
     console.error('Error processing email job:', error);
     throw new Error(`Failed to send email: ${error.message}`);
   }
-}, { connection: redisOptions });
+}, { connection: client });
 
 
 // Event handlers for the email worker

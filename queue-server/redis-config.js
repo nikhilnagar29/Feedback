@@ -1,22 +1,30 @@
-const redisOptions = {};
+const Redis = require('ioredis');
 
-// First check if REDIS_URL is provided (for hosted Redis services)
-if (process.env.REDIS_URL) {
-  redisOptions.url = process.env.REDIS_URL;
-} else {
-  // Fall back to individual connection parameters
-  redisOptions.socket = {
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
-  };
-  
-  // Optional credentials
-  if (process.env.REDIS_USERNAME) {
-    redisOptions.username = process.env.REDIS_USERNAME;
-  }
-  if (process.env.REDIS_PASSWORD) {
-    redisOptions.password = process.env.REDIS_PASSWORD;
-  }
-}
+// Create Redis client
+const client = new Redis({
+  port: parseInt(process.env.REDIS_PORT || '6379', 10), // Redis port
+  host: process.env.REDIS_HOST || '127.0.0.1',           // Redis host
+  username: process.env.REDIS_USERNAME || undefined,     // Optional
+  password: process.env.REDIS_PASSWORD || undefined,     // Optional
+  db: 0,
+  maxRetriesPerRequest: null,  // ✅ set this to null as required by BullMQ                                                 // Optional: Redis DB index
+});
 
-module.exports = redisOptions;
+// Log any Redis errors
+client.on('error', err => {
+  console.error('Redis Client Error:', err);
+});
+
+// Test connection
+(async () => {
+  try {
+    await client.set('connection_test', 'working');
+    const testResult = await client.get('connection_test');
+    console.log('Redis test result:', testResult);
+    console.log('Redis connected successfully');
+  } catch (err) {
+    console.error('Redis connection error:', err);
+  }
+})();
+
+module.exports = client;
