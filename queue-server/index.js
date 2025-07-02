@@ -12,7 +12,8 @@ require('./message-worker');
 // Import Redis connection configuration
 const redisOptions = require('./redis-config');
 
- 
+console.log( "redisOptions", redisOptions);
+
 // Create email queue
 const emailQueue = new Queue('email', { 
   connection: redisOptions,
