@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {  NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import UserModel, { Message } from '@/model/User';
+
+
 
 
 export async function POST(request: Request) {
@@ -38,7 +40,7 @@ export async function POST(request: Request) {
         }
 
         // Add the message directly without type casting
-        user.messages.push({ content } as any);
+        user.messages.push({ content } as Message);
         await user.save();
 
         
@@ -46,9 +48,11 @@ export async function POST(request: Request) {
             success: true,
             message: 'Message saved successfully in database',
         });
-    } catch (error : any) {
-        if (error.code === 429) {
-            return NextResponse.json(error.data, { status: 429 });
+    } catch (error: unknown) {
+        // Check if error is a rate limit error
+        const rateLimitError = error as { code?: number; data?: any };
+        if (rateLimitError.code === 429) {
+            return NextResponse.json(rateLimitError.data, { status: 429 });
         }
 
         console.error('Error processing message request:', error);

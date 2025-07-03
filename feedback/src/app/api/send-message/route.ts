@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import UserModel from '@/model/User';
 
@@ -67,9 +67,11 @@ export async function POST(request: Request) {
             message: 'Message queued successfully',
             jobId: result.jobId,
         });
-    } catch (error : any) {
-        if (error.code === 429) {
-            return NextResponse.json(error.data, { status: 429 });
+    } catch (error: unknown) {
+        // Check if error is a rate limit error
+        const rateLimitError = error as { code?: number; data?: any };
+        if (rateLimitError.code === 429) {
+            return NextResponse.json(rateLimitError.data, { status: 429 });
         }
 
         console.error('Error processing message request:', error);

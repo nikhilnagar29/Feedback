@@ -22,7 +22,6 @@ import { CheckCircle, Loader2, XCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/schemas/signUpSchema';
 import { toast } from '@/components/ui/toast';
-import { signIn } from 'next-auth/react';
 
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
@@ -77,8 +76,6 @@ export default function SignUpPage() {
             }
 
             checkedUsernames.current[usernameValue] = message;
-            console.log("usernameMessage : " ,usernameMessage , "message : " , message);
-            console.log("checkedUsernames.current : " , checkedUsernames.current);
         } 
       } catch (error) {
         if (isMounted) {
@@ -96,7 +93,7 @@ export default function SignUpPage() {
     return () => {
       isMounted = false;
     };
-  }, [debouncedUsername]);
+  }, [debouncedUsername, usernameMessage]);
   
 
 
@@ -213,7 +210,7 @@ export default function SignUpPage() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <Input {...field} name="email" />
-                  <p className='text-gray-500 text-sm mt-1'>We'll send you a verification code</p>
+                  <p className='text-gray-500 text-sm mt-1'>We&apos;ll send you a verification code</p>
                   <FormMessage />
                 </FormItem>
               )}

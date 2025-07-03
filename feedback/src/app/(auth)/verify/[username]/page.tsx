@@ -123,7 +123,7 @@ export default function VerifyPage({ params }: { params: { username: string } })
             Verify Your Email
           </h1>
           <p className="mb-6 text-gray-600">
-            We've sent a verification code to <span className="font-medium">{username}</span>. 
+            We&apos;ve sent a verification code to <span className="font-medium">{username}</span>. 
             Please enter the code below to verify your account.
           </p>
         </div>
@@ -161,7 +161,7 @@ export default function VerifyPage({ params }: { params: { username: string } })
 
         <div className="text-center mt-6">
           <p className="text-gray-600 mb-4">
-            Didn't receive the code?
+            Didn&apos;t receive the code?
           </p>
           <Button
             variant="outline"

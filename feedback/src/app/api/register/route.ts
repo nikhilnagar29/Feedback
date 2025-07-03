@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import dbConnect from '@/lib/dbConnect';
-import UserModel, { User } from '@/model/User';
+import UserModel from '@/model/User';
 import crypto from 'crypto';
 
 // Mail server URL
