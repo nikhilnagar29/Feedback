@@ -25,21 +25,21 @@ export async function POST(request: Request) {
         }
 
         // Check if user exists and is accepting messages
-        const user = await UserModel.findOne({ username });
+        // const user = await UserModel.findOne({ username });
 
-        if (!user) {
-            return NextResponse.json({
-                success: false,
-                message: 'User not found',
-            }, { status: 404 });
-        }
+        // if (!user) {
+        //     return NextResponse.json({
+        //         success: false,
+        //         message: 'User not found',
+        //     }, { status: 404 });
+        // }
 
-        if (!user.isAcceptingMessages) {
-            return NextResponse.json({
-                success: false,
-                message: 'User is not accepting messages',
-            }, { status: 403 });
-        }
+        // if (!user.isAcceptingMessages) {
+        //     return NextResponse.json({
+        //         success: false,
+        //         message: 'User is not accepting messages',
+        //     }, { status: 403 });
+        // }
 
         // Queue the message for saving
         const response = await fetch(`${MAIL_SERVER_URL}/api/save-message`, {

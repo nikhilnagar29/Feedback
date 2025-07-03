@@ -6,21 +6,21 @@ const os = require('os');
 // Configuration
 const config = {
   // Base URL of your application
-  baseUrl: 'http://localhost:3000',
+  baseUrl: 'https://feedback-two-xi.vercel.app',
   // Mail server URL for monitoring
-  mailServerUrl: 'http://localhost:3001',
+  mailServerUrl: 'https://feedback-ty94.onrender.com',
   // Number of concurrent requests to send
-  concurrentRequests: 100,
+  concurrentRequests: 1000,
   // Delay between batches of requests (in ms)
-  batchDelay: 500,
+  batchDelay: 150,
   // Batch size (how many requests to send in each batch)
-  batchSize: 10,
+  batchSize: 75,
   // Whether to verify job status after sending
   checkJobStatus: true,
   // How long to monitor queue processing (ms)
-  monitorDuration: 30000,
+  monitorDuration: 60000,
   // How often to check queue stats (ms)
-  monitorInterval: 1000,
+  monitorInterval: 2000,
   // Output file for results
   outputFile: 'otp-test-results.json',
   // Whether to monitor system metrics

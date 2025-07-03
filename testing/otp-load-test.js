@@ -8,19 +8,19 @@ const argv = yargs(hideBin(process.argv))
   .option('concurrentRequests', {
     alias: 'c',
     type: 'number',
-    default: 100,
+    default: 1000,
     description: 'Number of concurrent requests to send'
   })
   .option('batchSize', {
     alias: 'b',
     type: 'number',
-    default: 10,
+    default: 75,
     description: 'How many requests to send in each batch'
   })
   .option('batchDelay', {
     alias: 'd',
     type: 'number',
-    default: 500,
+    default: 200,
     description: 'Delay between batches in milliseconds'
   })
   .option('baseUrl', {
