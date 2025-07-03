@@ -10,8 +10,8 @@
     "test-redis": "node test-redis.js"
   },
   "dependencies": {
-    "@bull-board/api": "^4.9.2",
-    "@bull-board/express": "^4.9.2",
+    "@bull-board/api": "^5.8.0",
+    "@bull-board/express": "^5.8.0",
     "bullmq": "^4.18.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

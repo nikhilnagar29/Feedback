@@ -26,7 +26,7 @@ const argv = yargs(hideBin(process.argv))
   .option('baseUrl', {
     alias: 'u',
     type: 'string',
-    default: 'http://localhost:3000',
+    default: 'https://feedback-two-xi.vercel.app',
     description: 'Base URL of the application'
   })
   .option('checkJobStatus', {
