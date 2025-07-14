@@ -24,22 +24,33 @@ export const authOptions: NextAuthOptions = {
         
         await dbConnect();
         try {
+          // Include password in the query result by using select('+password')
           const user = await UserModel.findOne({
             $or: [
               { email: credentials.identifier },
               { username: credentials.identifier },
             ],
-          });
+          }).select('+password');
+          
           if (!user) {
             throw new Error('No user found with this email or username');
           }
+          
           if (!user.isVerified) {
             throw new Error('Please verify your account before logging in');
           }
+          
+          // Check if password exists in the user object
+          if (!user.password) {
+            console.error('Password field is missing from user object');
+            throw new Error('Authentication failed. Please contact support.');
+          }
+          
           const isPasswordCorrect = await bcrypt.compare(
             credentials.password,
             user.password
           );
+          
           if (isPasswordCorrect) {
             return user;
           } else {
@@ -47,6 +58,7 @@ export const authOptions: NextAuthOptions = {
           }
         } catch (err: unknown) {
           const error = err as Error;
+          console.error('Authentication error:', error);
           throw new Error(error.message);
         }
       },

@@ -81,12 +81,24 @@ export default function VerifyPage({ params }: { params: { username: string } })
   const handleResendOTP = async () => {
     setIsResending(true);
     try {
+
+      const email = localStorage.getItem('email');
+
+      if(!email){
+        toast({
+          title: 'Error',
+          description: 'Please sign up first',
+          variant: 'destructive',
+        });
+        return;
+      }
+
       const response = await fetch('/api/resend-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ email }),
       });
 
       const result = await response.json() as ApiResponse;

@@ -106,6 +106,8 @@ export default function SignUpPage() {
         title: 'Success',
         description: response.data.message,
       });
+      
+      localStorage.setItem('email', data.email);
 
       router.replace(`/verify/${data.username}`);
     } catch (error) {

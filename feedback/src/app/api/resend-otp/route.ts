@@ -11,6 +11,8 @@ export async function POST(req: NextRequest) {
     await dbConnect();
     
     const { email } = await req.json();
+
+
     
     if (!email) {
       return NextResponse.json(

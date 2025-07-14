@@ -47,13 +47,16 @@ export default function SignInPage() {
       });
 
       if (result?.error) {
+        console.error('Sign-in error:', result.error);
         toast({
           title: 'Sign In Failed',
-          description: result.error,
+          description: result.error === 'Illegal arguments: string, undefined' 
+            ? 'Authentication failed. Please try again or contact support.' 
+            : result.error,
           variant: 'destructive',
         });
       } else {
-        router.push('/');
+        router.push('/dashboard');
         toast({
           title: 'Success',
           description: 'Signed in successfully',
@@ -71,53 +74,7 @@ export default function SignInPage() {
     }
   };
 
-  const handleForgotPassword = async () => {
-    const email = form.getValues('identifier');
-    if (!email.includes('@')) {
-      toast({
-        title: 'Error',
-        description: 'Please enter a valid email address',
-        variant: 'destructive',
-      });
-      return;
-    }
 
-    setIsSubmitting(true);
-    try {
-      const response = await fetch('/api/resend-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      
-      if (data.success) {
-        toast({
-          title: 'Success',
-          description: data.message,
-        });
-        router.push(`/verify/${email}`);
-      } else {
-        toast({
-          title: 'Error',
-          description: data.message,
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      console.error('Error during password reset:', error);
-      toast({
-        title: 'Error',
-        description: 'There was a problem sending the reset email. Please try again.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-gray-800 to-gray-900">
@@ -156,16 +113,7 @@ export default function SignInPage() {
             />
 
             <div className="flex items-center justify-between">
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="text-sm text-blue-600 hover:text-blue-800"
-                onClick={handleForgotPassword}
-                disabled={isSubmitting}
-              >
-                Forgot Password?
-              </Button>
+             
             </div>
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>
@@ -179,13 +127,7 @@ export default function SignInPage() {
               )}
             </Button>
 
-            <div className="relative my-6">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              
-            </div>
-
+            
            
           </form>
         </Form>
