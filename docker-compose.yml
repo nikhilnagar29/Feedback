@@ -1,37 +1,30 @@
+version: "3.8"
+
 services:
-  # Queue Server for Email and Job Processing
-  queue-server:
-    container_name: feedback-queue-server
+  next-server:
     build:
-      context: ./feedback/queue-server
+      context: ./feedback
+    container_name: next-app
+    ports:
+      - "3000:3000"
+    # env_file:
+    #   - ./feedback/.env
+    environment:
+      - MAIL_SERVER_URL=http://queue-server:3001
+    networks:
+      - my-network
+
+  queue-server:
+    build:
+      context: ./queue-server
+    container_name: queue-server
     ports:
       - "3001:3001"
-    environment:
-      - NODE_ENV=development
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - PORT=3001
-      - EMAIL_USER=sociogram.verify.team@gmail.com
-      # Replace with your actual app password
-      - EMAIL_PASSWORD=your-app-password
-      - EMAIL_FROM=Feedback App <sociogram.verify.team@gmail.com>
-    volumes:
-      - ./feedback/queue-server:/app
-      - /app/node_modules
-    depends_on:
-      - redis
-    restart: unless-stopped
+    # env_file:
+    #   - ./queue-server/.env
+    networks:
+      - my-network
 
-  # Redis Server for Queue and Caching
-  redis:
-    container_name: feedback-redis
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-
-volumes:
-  redis_data: 
+networks:
+  my-network:
+    driver: bridge

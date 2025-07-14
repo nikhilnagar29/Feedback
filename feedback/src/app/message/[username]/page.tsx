@@ -23,16 +23,17 @@ export default function MessagePage({ params }: { params: { username: string } }
   const username = params.username;
   const decodedUsername = decodeURIComponent(username);
   
-
   // Check if user exists and is accepting messages
   useEffect(() => {
+    // Only run on the client side
+    if (typeof window === 'undefined') return;
+    
     const checkUser = async () => {
       try {
         const response = await fetch(`/api/check-user?username=${encodeURIComponent(username)}`);
         const data = await response.json();
         
         if (data.success) {
-
           setUserExists(true);
           setIsAcceptingMessages(data.isAcceptingMessages);
         } else {

@@ -15,9 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 
-const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/call-queue-server`);
-const data = await response.json();
-console.log('queue server is running', data.message);
+
 
 
 export const metadata: Metadata = {

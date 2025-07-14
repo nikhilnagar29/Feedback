@@ -1,23 +1,29 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 
 export default function Home() {
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
   const { status } = useSession();
 
+  // Only run on client side
   useEffect(() => {
-    // Only run on the client side
-    if (typeof window !== 'undefined') {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    // Only redirect if we're on the client and the component has mounted
+    if (isMounted) {
       if (status === 'authenticated') {
         router.push('/dashboard');
       } else if (status === 'unauthenticated') {
         router.push('/sign-in');
       }
     }
-  }, [status, router]);
+  }, [status, router, isMounted]);
 
   // Return a simple loading UI that can be rendered on the server
   return (

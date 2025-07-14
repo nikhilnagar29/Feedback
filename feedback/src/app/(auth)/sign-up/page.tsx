@@ -23,6 +23,7 @@ import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/schemas/signUpSchema';
 import { toast } from '@/components/ui/toast';
 
+
 export default function SignUpPage() {
   const [username, setUsername] = useState('');
   const [usernameMessage, setUsernameMessage] = useState('');
@@ -42,6 +43,15 @@ export default function SignUpPage() {
   });
 
   const checkedUsernames = useRef<Record<string, string>>({});
+
+  useEffect(() => {
+    const checkQueueServer = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/call-queue-server`);
+      const data = await response.json();
+      console.log('queue server is running', data.message);
+    }
+    checkQueueServer();
+  }, []);
 
   useEffect(() => {
     let isMounted = true;

@@ -57,6 +57,16 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    const checkQueueServer = async () => {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/call-queue-server`);
+      const data = await response.json();
+      console.log('queue server is running', data.message);
+    }
+    checkQueueServer();
+  }, []);
+
+
   // Fetch user details
   useEffect(() => {
     if (typeof window !== 'undefined' && status === 'authenticated') {
