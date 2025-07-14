@@ -6,6 +6,7 @@ import { MessageSquare, Send, Check, AlertCircle, Heart, XCircle } from 'lucide-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
+import React from 'react';
 
 export default function MessagePage({ params }: { params: { username: string } }) {
   const router = useRouter();
@@ -19,7 +20,9 @@ export default function MessagePage({ params }: { params: { username: string } }
   const [userExists, setUserExists] = useState(false);
   const [isAcceptingMessages, setIsAcceptingMessages] = useState(false);
   const MAX_CHARS = 1000;
-  const username = decodeURIComponent(params.username);
+  const username = params.username;
+  const decodedUsername = decodeURIComponent(username);
+  
 
   // Check if user exists and is accepting messages
   useEffect(() => {

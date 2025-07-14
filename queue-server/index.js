@@ -90,6 +90,13 @@ app.post('/api/send-otp', async (req, res) => {
   }
 });
 
+app.get('/api/check', async (req, res) => {
+  res.json({
+    success: true,
+    message: 'Queue server is running',
+  });
+});
+
 // API endpoint to save message to database via queue
 app.post('/api/save-message', async (req, res) => {
   try {

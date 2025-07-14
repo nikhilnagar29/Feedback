@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { Loader2, Settings, User, MessageSquare, LogOut, ChevronLeft, ChevronRight, Link, Link2, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -170,7 +170,13 @@ export default function DashboardPage() {
 
   // Handle sign out
   const handleSignOut = async () => {
-    router.push('/sign-in');
+    try {
+      await signOut({ redirect: true, callbackUrl: '/sign-in' });
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Fallback if signOut fails
+      router.push('/sign-in');
+    }
   };
 
   // Format date
@@ -211,9 +217,10 @@ export default function DashboardPage() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Top Section: User Profile and Message Link */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* User Profile Card */}
-          <Card className="lg:col-span-1">
+          <Card className="lg:col-span-1.5">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <User className="h-5 w-5 mr-2" />
@@ -239,17 +246,54 @@ export default function DashboardPage() {
                       <p>{userDetails.isVerified ? 'Verified' : 'Not Verified'}</p>
                     </div>
                   </div>
+                  
+                </>
+              ) : (
+                <p className="text-gray-500">Failed to load user details</p>
+              )}
+            </CardContent>
+         
+          </Card>
+
+          {/* Message Link Card */}
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle className="flex items-center">
+                    <Link2 className="h-5 w-5 mr-2" />
+                    Your Message Link
+                  </CardTitle>
+                  <CardDescription className="text-sm text-gray-500 mt-2">Share this link with your users to receive feedback</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center flex items-center justify-center">
+                <p className="text-gray-500">{messageLink}</p>
+                <Copy className="h-4 w-4 cursor-pointer ml-3" onClick={() => {
+                  navigator.clipboard.writeText(messageLink);
+                  toast({
+                    title: 'Copied to clipboard',
+                    description: 'Link copied to clipboard',
+                  });
+                }} />
+              </div>
+              {userDetails ? (
+                <>
+                  
+                  
+                  
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-gray-500">Accepting Messages</p>
                     <div className="flex items-center">
                       <span className={`inline-block h-2 w-2 rounded-full mr-2 ${messageAcceptance ? 'bg-green-500' : 'bg-red-500'}`}></span>
                       <p>{messageAcceptance ? 'Yes' : 'No'}</p>
-                      
                     </div>
                   </div>
                   <div className="space-y-1">
                     <p className="text-sm font-medium text-gray-500">Total Messages</p>
-                    <p className="font-medium">{userDetails.messagesCount}</p>
+                    <p className="font-medium">{messages.length}</p>
                   </div>
                 </>
               ) : (
@@ -263,41 +307,13 @@ export default function DashboardPage() {
                 {messageAcceptance ? 'Stop Accepting Messages' : 'Start Accepting Messages'}
               </Button>
             </CardFooter>
-            <Card className="lg:col-span-2">
-            <CardHeader>
-              <div className="flex justify-between items-center">
-                <div>
-                  <CardTitle className="flex items-center">
-                    <Link2 className="h-5 w-5 mr-2" />
-                    Your Message Link
-                  </CardTitle>
-                  <CardDescription className="text-sm text-gray-500 mt-2">Share this link with your users to receive feedback</CardDescription>
-                </div>
-                
-              </div>
-            </CardHeader>
-            <CardContent>
-              
-                <div className="text-center flex items-center justify-center">
-                  <p className="text-gray-500">{messageLink} </p>
-                  <Copy className="h-4 w-4 cursor-pointer ml-3" onClick={() => {
-                    navigator.clipboard.writeText(messageLink);
-                    toast({
-                      title: 'Copied to clipboard',
-                      description: 'Link copied to clipboard',
-                    });
-                  }} />
-                  
-                </div>
-            
-            </CardContent>
-            
           </Card>
-          
-          </Card>
+        </div>
 
+        {/* Bottom Section: Messages */}
+        <div className="grid grid-cols-1 gap-8">
           {/* Messages Card */}
-          <Card className="lg:col-span-2">
+          <Card className="w-full">
             <CardHeader>
               <div className="flex justify-between items-center">
                 <div>
@@ -368,11 +384,6 @@ export default function DashboardPage() {
               </CardFooter>
             )}
           </Card>
-        </div>
-
-        {/* Message Link Card */}
-        <div className="flex justify-center items-center mt-8">
-       
         </div>
       </div>
     </div>
